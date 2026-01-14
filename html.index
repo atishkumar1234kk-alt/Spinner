@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>3D Physics Spinner</title>
+<style>
+body{
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+background:#0f172a;
+perspective:800px;
+}
+
+#spinner{
+width:160px;
+height:160px;
+border-radius:50%;
+background:linear-gradient(45deg,#00e5ff,#2962ff);
+position:relative;
+transform-style:preserve-3d;
+box-shadow:0 15px 30px rgba(0,0,0,0.6);
+cursor:grab;
+}
+
+#spinner::before{
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+border-radius:50%;
+background:#1e293b;
+transform:translateZ(-20px);
+}
+
+.center{
+width:35px;
+height:35px;
+background:#000;
+border-radius:50%;
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%) translateZ(10px);
+}
+
+.arm{
+width:35px;
+height:35px;
+background:#fff;
+border-radius:50%;
+position:absolute;
+transform:translateZ(10px);
+}
+
+.a1{ top:5px; left:62px;}
+.a2{ bottom:5px; left:62px;}
+.a3{ left:5px; top:62px;}
+.a4{ right:5px; top:62px;}
+</style>
+</head>
+
+<body>
+
+<div id="spinner">
+<div class="center"></div>
+<div class="arm a1"></div>
+<div class="arm a2"></div>
+<div class="arm a3"></div>
+<div class="arm a4"></div>
+</div>
+
+<script>
+let spinner=document.getElementById("spinner");
+let angle=0;
+let speed=0;
+let friction=0.97;
+let drag=false;
+let lastX=0;
+
+spinner.onmousedown=(e)=>{
+drag=true;
+lastX=e.clientX;
+}
+
+document.onmouseup=()=>{
+drag=false;
+}
+
+document.onmousemove=(e)=>{
+if(drag){
+let move=e.clientX-lastX;
+speed=move*0.6;
+lastX=e.clientX;
+}
+}
+
+function run(){
+angle+=speed;
+speed*=friction;
+
+spinner.style.transform=
+`rotateX(20deg) rotateY(15deg) rotateZ(${angle}deg)`;
+
+requestAnimationFrame(run);
+}
+run();
+</script>
+
+</body>
+</html>
